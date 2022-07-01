@@ -51,6 +51,7 @@ $config = [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/v1/moto'],
                 ],
+                'GET api/v1/moto/<moto_id>' => 'api/v1/moto/get-rents'
             ],
         ],
 
