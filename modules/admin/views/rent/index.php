@@ -16,10 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Rent', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
@@ -33,11 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'moto_id',
             'date_rent_started',
             'date_rent_ended',
-            //'created_at',
+            'created_at',
             //'updated_at',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Rent $model, $key, $index, $column) {
+                'template' => '{view}',
+                'urlCreator' => function ($action, \app\models\Rent $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
