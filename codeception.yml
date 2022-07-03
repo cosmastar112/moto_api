@@ -12,6 +12,10 @@ modules:
     config:
         Yii2:
             configFile: 'config/test.php'
+        Db:
+            dsn: 'mysql:host=db;dbname=moto_test'
+            user: 'moto'
+            password: 'password'
 
 # To enable code coverage:
 #coverage:
