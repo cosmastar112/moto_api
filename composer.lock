@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6867767cf6cbec7c1602791eea669ac9",
+    "content-hash": "1750edf543a3dc0f9a4947769b273423",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -1609,6 +1609,58 @@
             "time": "2020-08-28T08:06:29+00:00"
         },
         {
+            "name": "codeception/module-db",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Codeception/module-db.git",
+                "reference": "8c8076cd05d4db95798acd7dba2a56578210982c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Codeception/module-db/zipball/8c8076cd05d4db95798acd7dba2a56578210982c",
+                "reference": "8c8076cd05d4db95798acd7dba2a56578210982c",
+                "shasum": ""
+            },
+            "require": {
+                "codeception/codeception": "*@dev",
+                "php": ">=5.6.0 <9.0"
+            },
+            "conflict": {
+                "codeception/codeception": "<4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Bodnarchuk"
+                },
+                {
+                    "name": "Gintautas Miselis"
+                }
+            ],
+            "description": "DB module for Codeception",
+            "homepage": "http://codeception.com/",
+            "keywords": [
+                "codeception",
+                "database-testing",
+                "db-testing"
+            ],
+            "support": {
+                "issues": "https://github.com/Codeception/module-db/issues",
+                "source": "https://github.com/Codeception/module-db/tree/1.1.0"
+            },
+            "time": "2020-12-20T13:37:07+00:00"
+        },
+        {
             "name": "codeception/module-filesystem",
             "version": "1.0.3",
             "source": {
@@ -2969,20 +3021,20 @@
         },
         {
             "name": "psr/container",
-            "version": "1.1.2",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
+                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
-                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4.0"
+                "php": ">=7.2.0"
             },
             "type": "library",
             "autoload": {
@@ -3011,9 +3063,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/1.1.2"
+                "source": "https://github.com/php-fig/container/tree/1.1.1"
             },
-            "time": "2021-11-05T16:50:12+00:00"
+            "time": "2021-03-05T17:36:06+00:00"
         },
         {
             "name": "psr/event-dispatcher",
