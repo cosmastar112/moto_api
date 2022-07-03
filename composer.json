@@ -74,7 +74,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "tests\\": "tests/"
+            "tests\\": "tests/",
+            "app\\modules\\": "modules/"
         }
     }
 }
