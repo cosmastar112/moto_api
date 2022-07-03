@@ -2,7 +2,7 @@
 
 namespace app\modules\api\modules\v1\models;
 
-use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "rent".
@@ -17,6 +17,8 @@ use Yii;
  */
 class Rent extends \yii\db\ActiveRecord
 {
+    public $timezone;
+
     /**
      * {@inheritdoc}
      */
@@ -25,17 +27,46 @@ class Rent extends \yii\db\ActiveRecord
         return 'rent';
     }
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors[] = [
+            'class' => TimestampBehavior::class,
+            'value' => gmdate('Y-m-d H:i:s'),
+        ];
+
+        return $behaviors;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['username', 'moto_id', 'date_rent_started', 'date_rent_ended', 'created_at'], 'required'],
-            [['moto_id'], 'integer'],
-            [['date_rent_started', 'date_rent_ended', 'created_at', 'updated_at'], 'safe'],
+            [['username', 'moto_id', 'date_rent_started', 'date_rent_ended', 'timezone'], 'required'],
+            [['moto_id', 'timezone'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['date_rent_started', 'date_rent_ended'], 'string'],
             [['username'], 'string', 'max' => 64],
+            ['moto_id', 'validateMotoAlreadyRented']
         ];
+    }
+
+    public function validateMotoAlreadyRented($attribute, $params)
+    {
+        $validator = new MotoAlreadyRentedValidator([
+            'moto_id' => $this->moto_id,
+            'date_rent_started' => $this->date_rent_started,
+            'date_rent_ended' => $this->date_rent_ended,
+            'timezone' => $this->timezone,
+            'db' => self::getDb(),
+        ]);
+        if (!$validator->validate()) {
+            foreach ($validator->getErrors() as $errorKey => $errorMessage) {
+                $this->addError($errorKey, $errorMessage);
+            }
+        }
     }
 
     /**
