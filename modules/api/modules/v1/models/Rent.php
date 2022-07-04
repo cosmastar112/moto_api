@@ -50,7 +50,7 @@ class Rent extends \yii\db\ActiveRecord
             [['date_rent_started', 'date_rent_ended'], 'string'],
             [['username'], 'string', 'max' => 64],
             ['username', 'validateMotoAlreadyRentedByAnotherUser'],
-            ['moto_id', 'validateMotoAlreadyRented'],
+            ['moto_id', 'validateMotoAlreadyRentedByPeriod'],
         ];
     }
 
@@ -69,16 +69,15 @@ class Rent extends \yii\db\ActiveRecord
         }
     }
 
-    public function validateMotoAlreadyRented($attribute, $params)
+    public function validateMotoAlreadyRentedByPeriod($attribute, $params)
     {
         $validator = new MotoAlreadyRentedValidator([
             'moto_id' => $this->moto_id,
             'date_rent_started' => $this->date_rent_started,
             'date_rent_ended' => $this->date_rent_ended,
-            'timezone' => $this->timezone,
             'db' => self::getDb(),
         ]);
-        if (!$validator->validate()) {
+        if (!$validator->validateMotoAlreadyRentedByPeriod()) {
             foreach ($validator->getErrors() as $errorKey => $errorMessage) {
                 $this->addError($errorKey, $errorMessage);
             }
