@@ -3,6 +3,7 @@
 namespace app\modules\api\modules\v1\models;
 
 use yii\behaviors\TimestampBehavior;
+use app\models\GMTDatetime;
 
 /**
  * This is the model class for table "rent".
@@ -48,6 +49,14 @@ class Rent extends \yii\db\ActiveRecord
             [['moto_id', 'timezone'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['date_rent_started', 'date_rent_ended'], 'string'],
+            [['date_rent_started', 'date_rent_ended'], 'filter', 'filter' => function($value) {
+                $model = new GMTDatetime();
+                $model->datetime = $value;
+                $model->gmtOffset = $this->timezone;
+                $result = $model->normalize();
+
+                return $result;
+            }],
             [['username'], 'string', 'max' => 64],
             ['username', 'validateMotoAlreadyRentedByAnotherUser'],
             ['moto_id', 'validateMotoAlreadyRentedByPeriod'],
