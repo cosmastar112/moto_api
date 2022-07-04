@@ -16,6 +16,9 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'FlK5k3qmok4QUPRjSiWzqGBmkkRtTROI',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -52,7 +55,8 @@ $config = [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/v1/moto'],
                 ],
-                'GET api/v1/moto/<moto_id>' => 'api/v1/moto/get-rents'
+                'GET api/v1/moto/<moto_id>' => 'api/v1/moto/get-rents',
+                'POST api/v1/moto/<moto_id>/rent' => 'api/v1/moto/create-rent',
             ],
         ],
 

@@ -37,4 +37,35 @@ class MotoController extends ActiveController
             'query' => $query,
         ]);
     }
+
+    //create-rent
+    public function actionCreateRent()
+    {
+        $queryParams = Yii::$app->getRequest()->getQueryParams();
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+
+        $rent = new Rent();
+        $rent->moto_id = !empty($queryParams) && isset($queryParams['moto_id']) ? $queryParams['moto_id'] : null;
+        $rent->username = !empty($bodyParams) && isset($bodyParams['username']) ? $bodyParams['username'] : null;
+        $rent->date_rent_started = !empty($bodyParams) && isset($bodyParams['date_rent_started']) ? $bodyParams['date_rent_started'] : null;
+        $rent->date_rent_ended = !empty($bodyParams) && isset($bodyParams['date_rent_ended']) ? $bodyParams['date_rent_ended'] : null;
+        $rent->timezone = !empty($bodyParams) && isset($bodyParams['timezone']) ? $bodyParams['timezone'] : null;
+
+        if (!$rent->save()) {
+            $errors = implode('; ', $rent->getErrorSummary(true));
+            throw new \yii\web\BadRequestHttpException($errors);
+        }
+
+        return [
+            'message' => 'OK',
+            'code' => 200,
+            'data' => [
+                'id' => $rent->id,
+                'moto_id' => $rent->moto_id,
+                'username' => $rent->username,
+                'date_rent_started' => $rent->date_rent_started,
+                'date_rent_ended' => $rent->date_rent_ended,
+            ]
+        ];
+    }
 }
