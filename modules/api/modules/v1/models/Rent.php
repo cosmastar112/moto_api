@@ -49,8 +49,24 @@ class Rent extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['date_rent_started', 'date_rent_ended'], 'string'],
             [['username'], 'string', 'max' => 64],
-            ['moto_id', 'validateMotoAlreadyRented']
+            ['username', 'validateMotoAlreadyRentedByAnotherUser'],
+            ['moto_id', 'validateMotoAlreadyRented'],
         ];
+    }
+
+    //нельзя арендовать мотоцикл, который уже в аренде у ДРУГОГО пользователя (независимо от корректности даты аренды)
+    public function validateMotoAlreadyRentedByAnotherUser($attribute, $params)
+    {
+        $validator = new MotoAlreadyRentedValidator([
+            'username' => $this->$attribute,
+            'moto_id' => $this->moto_id,
+            'db' => self::getDb(),
+        ]);
+        if (!$validator->validateMotoAlreadyRentedByAnotherUser()) {
+            foreach ($validator->getErrors() as $errorKey => $errorMessage) {
+                $this->addError($errorKey, $errorMessage);
+            }
+        }
     }
 
     public function validateMotoAlreadyRented($attribute, $params)
