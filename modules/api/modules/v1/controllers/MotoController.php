@@ -68,6 +68,7 @@ class MotoController extends ActiveController
                 'username' => $rent->username,
                 'date_rent_started' => $rent->date_rent_started,
                 'date_rent_ended' => $rent->date_rent_ended,
+                'created_at' => $rent->created_at,
             ]
         ];
     }
