@@ -7,6 +7,7 @@ use yii\rest\ActiveController;
 use yii\web\Response;
 use yii\data\ActiveDataProvider;
 use app\modules\api\modules\v1\models\Rent;
+use app\modules\api\modules\v1\models\Motorbike;
 
 class MotoController extends ActiveController
 {
@@ -22,15 +23,17 @@ class MotoController extends ActiveController
     //get-rents
     public function actionGetRents()
     {
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
-        if (empty($requestParams)) {
-            $requestParams = Yii::$app->getRequest()->getQueryParams();
+        $requestParams = Yii::$app->getRequest()->getQueryParams();
+
+        /** @var string $moto_id Идентификатор мотоцикла */
+        $moto_id = isset($requestParams['moto_id']) ? $requestParams['moto_id'] : null;
+        if (is_null($moto_id) || is_null(Motorbike::findOne($moto_id))) {
+            throw new \yii\web\NotFoundHttpException('Мотоцикл не найден');
         }
 
-        $query = Rent::find();
-        if (!empty($requestParams) && isset($requestParams['moto_id'])) {
-            $query->andWhere(['moto_id' => $requestParams['moto_id']]);
-        }
+        /** @var \yii\db\QueryInterface $query Объект запроса. */
+        $query = Rent::find()
+            ->andWhere(['moto_id' => $requestParams['moto_id']]);
 
         return Yii::createObject([
             'class' => ActiveDataProvider::className(),
