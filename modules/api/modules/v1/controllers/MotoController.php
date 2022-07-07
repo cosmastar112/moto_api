@@ -9,6 +9,12 @@ use yii\data\ActiveDataProvider;
 use app\modules\api\modules\v1\models\Rent;
 use app\modules\api\modules\v1\models\Motorbike;
 
+/**
+ * @OA\Info(
+ *     title="Moto API",
+ *     version="1"
+ * )
+ */
 class MotoController extends ActiveController
 {
     public $modelClass = 'app\modules\api\modules\v1\models\Motorbike';
@@ -20,6 +26,26 @@ class MotoController extends ActiveController
         return $behaviors;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/moto/{moto_id}/get-rents",
+     *     summary="Список аренд мотоцикла по его ID",
+     *     description="Получение списка аренд указанного мотоцикла",
+     *     tags={"moto"},
+     *     @OA\Parameter(
+     *         description="ID мотоцикла",
+     *         in="path",
+     *         name="moto_id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Получение списка аренд указанного мотоцикла"),
+     *     @OA\Response(response="404", description="Мотоцикл не найден")
+     * )
+     */
     //get-rents
     public function actionGetRents()
     {
@@ -41,6 +67,57 @@ class MotoController extends ActiveController
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/moto/{moto_id}/rent",
+     *     summary="Арендовать мотоцикл",
+     *     description="Создание аренды мотоцикла на указанный интервал времени (в запросе должна быть указана таймзона).
+
+Время указывается в формате ""Год-Месяц-Дата Часы:Минуты:Секунды"" в GMT с поправкой на таймзону.
+
+Таймзона может принимать значение [-12; 12].
+
+Например: если клиент из Москвы указывает время ""2022-03-07 11:33:00"" и таймзону 3, то после преобразования к часовому поясу GMT+3 оно будет равно ""2022-03-07 11:33:00"".",
+     *     tags={"moto"},
+     *     @OA\Parameter(
+     *         description="ID мотоцикла",
+     *         in="path",
+     *         name="moto_id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Аренда",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="username",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="date_rent_started",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="date_rent_ended",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="timezone",
+     *                     type="integer"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Получение списка аренд указанного мотоцикла"),
+     *     @OA\Response(response="400", description="Данные не прошли валидацию")
+     * )
+     */
     //create-rent
     public function actionCreateRent()
     {
