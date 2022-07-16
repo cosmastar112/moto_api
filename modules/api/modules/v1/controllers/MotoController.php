@@ -28,7 +28,7 @@ class MotoController extends ActiveController
 
     /**
      * @OA\Get(
-     *     path="/api/v1/moto/{moto_id}/get-rents",
+     *     path="/api/v1/moto/{moto_id}",
      *     summary="Список аренд мотоцикла по его ID",
      *     description="Получение списка аренд указанного мотоцикла",
      *     tags={"moto"},
