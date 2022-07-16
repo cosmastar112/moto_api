@@ -49,6 +49,7 @@ class Rent extends \yii\db\ActiveRecord
             [['moto_id', 'timezone'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['date_rent_started', 'date_rent_ended'], 'string'],
+            [['date_rent_started', 'date_rent_ended'], 'date', 'format' => 'php:Y-m-d H:i:s'],
             [['date_rent_started', 'date_rent_ended'], 'filter', 'filter' => function($value) {
                 $model = new GMTDatetime();
                 $model->datetime = $value;
