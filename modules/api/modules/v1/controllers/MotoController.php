@@ -42,7 +42,46 @@ class MotoController extends ActiveController
      *             format="int64"
      *         )
      *     ),
-     *     @OA\Response(response="200", description="Получение списка аренд указанного мотоцикла"),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Cписок аренд указанного мотоцикла",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="username",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="moto_id",
+     *                         type="integer"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="date_rent_started",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="date_rent_ended",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
      *     @OA\Response(response="404", description="Мотоцикл не найден")
      * )
      */
@@ -114,7 +153,40 @@ class MotoController extends ActiveController
      *             )
      *         )
      *     ),
-     *     @OA\Response(response="200", description="Получение списка аренд указанного мотоцикла"),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Результат создания аренды",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="moto_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="username",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="date_rent_started",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="date_rent_ended",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_at",
+     *                     type="string"
+     *                 )
+     *             )
+     *         )
+     *     ),
      *     @OA\Response(response="400", description="Данные не прошли валидацию")
      * )
      */
