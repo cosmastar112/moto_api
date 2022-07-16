@@ -59,7 +59,7 @@ class Rent extends \yii\db\ActiveRecord
                 return $result;
             }],
             [['username'], 'string', 'max' => 64],
-            ['username', 'validateMotoAlreadyRentedByAnotherUser'],
+            ['moto_id', 'validateMotoAlreadyRentedByAnotherUser'],
             ['moto_id', 'validateMotoAlreadyRentedByPeriod'],
         ];
     }
@@ -67,29 +67,39 @@ class Rent extends \yii\db\ActiveRecord
     //нельзя арендовать мотоцикл, который уже в аренде у ДРУГОГО пользователя (независимо от корректности даты аренды)
     public function validateMotoAlreadyRentedByAnotherUser($attribute, $params)
     {
-        $validator = new MotoAlreadyRentedValidator([
-            'username' => $this->$attribute,
-            'moto_id' => $this->moto_id,
-            'db' => self::getDb(),
-        ]);
-        if (!$validator->validateMotoAlreadyRentedByAnotherUser()) {
-            foreach ($validator->getErrors() as $errorKey => $errorMessage) {
-                $this->addError($errorKey, $errorMessage);
+        if ($this->hasErrors('date_rent_started') || $this->hasErrors('date_rent_ended')) {
+            $this->addError($attribute, 'Не удалось проверить занятость мотоцикла другим пользователем, т.к. период указан некорректно');
+        } else {
+            //валидация выполняется только если даты указаного периода (начало и конец аренды) корректные: являются строками в правильном формате даты-времени
+            $validator = new MotoAlreadyRentedValidator([
+                'username' => $this->username,
+                'moto_id' => $this->moto_id,
+                'db' => self::getDb(),
+            ]);
+            if (!$validator->validateMotoAlreadyRentedByAnotherUser()) {
+                foreach ($validator->getErrors() as $errorKey => $errorMessage) {
+                    $this->addError($errorKey, $errorMessage);
+                }
             }
         }
     }
 
     public function validateMotoAlreadyRentedByPeriod($attribute, $params)
     {
-        $validator = new MotoAlreadyRentedValidator([
-            'moto_id' => $this->moto_id,
-            'date_rent_started' => $this->date_rent_started,
-            'date_rent_ended' => $this->date_rent_ended,
-            'db' => self::getDb(),
-        ]);
-        if (!$validator->validateMotoAlreadyRentedByPeriod()) {
-            foreach ($validator->getErrors() as $errorKey => $errorMessage) {
-                $this->addError($errorKey, $errorMessage);
+        if ($this->hasErrors('date_rent_started') || $this->hasErrors('date_rent_ended')) {
+            $this->addError($attribute, 'Не удалось проверить занятость мотоцикла на указанный период, т.к. период указан некорректно');
+        } else {
+            //валидация выполняется только если даты указаного периода (начало и конец аренды) корректные: являются строками в правильном формате даты-времени
+            $validator = new MotoAlreadyRentedValidator([
+                'moto_id' => $this->moto_id,
+                'date_rent_started' => $this->date_rent_started,
+                'date_rent_ended' => $this->date_rent_ended,
+                'db' => self::getDb(),
+            ]);
+            if (!$validator->validateMotoAlreadyRentedByPeriod()) {
+                foreach ($validator->getErrors() as $errorKey => $errorMessage) {
+                    $this->addError($errorKey, $errorMessage);
+                }
             }
         }
     }
