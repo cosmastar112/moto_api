@@ -1,9 +1,28 @@
 version: '2'
 services:
-  php:
-    image: yiisoftware/yii2-php:7.4-apache
+  app:
+    container_name: moto_api
+    image: yiisoftware/yii2-php:7.3-apache
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
     ports:
-      - '8000:80'
+      - '8080:80'
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: moto
+      MYSQL_USER: moto
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysqldb-volume:/var/lib/mysql
+      - ./docker/provision/mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysqldb-volume:
