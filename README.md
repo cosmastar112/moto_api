@@ -31,13 +31,13 @@
 
 Результат представить в виде репозитория в git (можно на github например) с информацией по разворачиванию проекта (можно в readme).
 
-## Зависимости
-~~~
-composer install
-~~~
-
 ## Настройка окружения
 ### Docker
+Установить зависимости:
+~~~
+docker-compose run --rm app composer install
+~~~
+
 Развернуть приложение:
 ~~~
 docker-compose up --build -d
@@ -60,6 +60,12 @@ docker-compose exec app php yii migrate --db=test_db --interactive=0
 * Apache 2.4
 * PHP 7.3.33
 * MySQL 5.7
+
+#### Composer
+Установить зависимости:
+~~~
+composer install
+~~~
 
 #### Apache
 
