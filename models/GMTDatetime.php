@@ -31,12 +31,10 @@ class GMTDatetime extends \yii\base\Model
 
         /** @var string $gmtOffsetString Смещение от GMT */
         $gmtOffsetString = $this->gmtOffset > 0 ? "+$this->gmtOffset" : "$this->gmtOffset";
-        /** @var DateTime $date Дата со смещением от GMT */
-        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $this->datetime, new \DateTimeZone("GMT$gmtOffsetString"));
-
-        $gmtDate = clone $date;
-        /** @var DateTime $gmtDate Дата в GMT+0 */
-        $gmtDate->setTimezone(new \DateTimeZone('GMT'));
+        /** @var DateTimeImmutable $date Дата со смещением от GMT */
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $this->datetime, new \DateTimeZone("GMT$gmtOffsetString"));
+        /** @var DateTimeImmutable $gmtDate Дата в GMT+0 */
+        $gmtDate = $date->setTimezone(new \DateTimeZone('GMT'));
 
         return $gmtDate->format('Y-m-d H:i:s');
     }
