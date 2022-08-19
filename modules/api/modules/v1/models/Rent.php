@@ -4,6 +4,7 @@ namespace app\modules\api\modules\v1\models;
 
 use yii\behaviors\TimestampBehavior;
 use app\models\GMTDatetime;
+use app\modules\api\modules\v1\Module;
 
 /**
  * This is the model class for table "rent".
@@ -68,7 +69,7 @@ class Rent extends \yii\db\ActiveRecord
     public function validateMotoAlreadyRentedByAnotherUser($attribute, $params)
     {
         if ($this->hasErrors('date_rent_started') || $this->hasErrors('date_rent_ended')) {
-            $this->addError($attribute, 'Не удалось проверить занятость мотоцикла другим пользователем, т.к. период указан некорректно');
+            $this->addError($attribute, Module::t('errors', 'Period is incorrect, can\'t check is motorbike already rented by another user or not'));
         } else {
             //валидация выполняется только если даты указаного периода (начало и конец аренды) корректные: являются строками в правильном формате даты-времени
             $validator = new MotoAlreadyRentedValidator([
@@ -87,7 +88,7 @@ class Rent extends \yii\db\ActiveRecord
     public function validateMotoAlreadyRentedByPeriod($attribute, $params)
     {
         if ($this->hasErrors('date_rent_started') || $this->hasErrors('date_rent_ended')) {
-            $this->addError($attribute, 'Не удалось проверить занятость мотоцикла на указанный период, т.к. период указан некорректно');
+            $this->addError($attribute, Module::t('errors', 'Period is incorrect, can\'t check is motorbike already rented at this period or not'));
         } else {
             //валидация выполняется только если даты указаного периода (начало и конец аренды) корректные: являются строками в правильном формате даты-времени
             $validator = new MotoAlreadyRentedValidator([

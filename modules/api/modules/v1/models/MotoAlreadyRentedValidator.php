@@ -2,6 +2,8 @@
 
 namespace app\modules\api\modules\v1\models;
 
+use app\modules\api\modules\v1\Module;
+
 class MotoAlreadyRentedValidator extends \yii\base\BaseObject
 {
     public $username;
@@ -24,7 +26,7 @@ class MotoAlreadyRentedValidator extends \yii\base\BaseObject
             ->all($this->db);
 
         if (!empty($models)) {
-            $this->setError('username', 'Мотоцикл арендован другим пользователем');
+            $this->setError('username', Module::t('errors', 'Motorbike already rented by another user'));
         }
 
         if (empty($this->getErrors())) {
@@ -50,7 +52,7 @@ class MotoAlreadyRentedValidator extends \yii\base\BaseObject
             ->all($this->db);
 
         if (!empty($models)) {
-            $this->setError('moto_id', 'Мотоцикл занят в указанный период');
+            $this->setError('moto_id', Module::t('errors', 'Motorbike already rented at this period'));
         }
 
         if (empty($this->getErrors())) {
