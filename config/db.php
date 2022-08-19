@@ -6,6 +6,11 @@ return [
     'username' => 'moto',
     'password' => 'password',
     'charset' => 'utf8',
+    'on afterOpen' => function($event) {
+        // $event->sender refers to the DB connection
+        //установка таймзоны UTC
+        $event->sender->createCommand("SET time_zone = '+00:00'")->execute();
+    },
 
     // Schema cache options (for production environment)
     'enableSchemaCache' => true,
