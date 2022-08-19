@@ -8,6 +8,7 @@ use yii\web\Response;
 use yii\data\ActiveDataProvider;
 use app\modules\api\modules\v1\models\Rent;
 use app\modules\api\modules\v1\models\Motorbike;
+use app\modules\api\modules\v1\Module;
 
 /**
  * @OA\Info(
@@ -93,7 +94,7 @@ class MotoController extends ActiveController
         /** @var string $moto_id Идентификатор мотоцикла */
         $moto_id = isset($requestParams['moto_id']) ? $requestParams['moto_id'] : null;
         if (is_null($moto_id) || is_null(Motorbike::findOne($moto_id))) {
-            throw new \yii\web\NotFoundHttpException('Мотоцикл не найден');
+            throw new \yii\web\NotFoundHttpException(Module::t('errors', 'Motorbike not found'));
         }
 
         /** @var \yii\db\QueryInterface $query Объект запроса. */
