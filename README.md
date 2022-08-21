@@ -152,7 +152,7 @@ curl -X GET http://moto-rent-api.loc:8080/api/v1/moto/1
 
 ### Создание аренды
 ~~~
-curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"username1\", \"date_rent_started\":\"2022-03-07 11:33:00\", \"date_rent_ended\":\"2022-03-07 12:33:00\", \"timezone\":\"2\"}" http://moto-rent-api.loc:8080/api/v1/moto/2/rent
+curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"username1\", \"date_rent_started\":\"2022-03-07 11:33:00\", \"date_rent_ended\":\"2022-03-07 12:33:00\", \"timezone\":\"Europe\/Samara\"}" http://moto-rent-api.loc:8080/api/v1/moto/2/rent
 ~~~
 
 ## Документация

@@ -38,6 +38,31 @@ return [
             ],
             */
         ],
+        'i18n' => [
+            'translations' => [
+                'modules/api/v1/*' => [
+                    'class'          => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'en-US',
+                    'basePath'       => '@app/modules/api/modules/v1/messages',
+                    'fileMap'        => [
+                        'modules/api/v1/errors' => 'errors.php',
+                    ],
+                ]
+            ]
+        ]
     ],
     'params' => $params,
+    'modules' => [
+        'admin' => [
+            'class' => 'app\modules\admin\Module',
+        ],
+        'api' => [
+            'class' => 'app\modules\api\Module',
+            'modules' => [
+                'v1' => [
+                    'class' => 'app\modules\api\modules\v1\Module',
+                ]
+            ],
+        ],
+    ],
 ];

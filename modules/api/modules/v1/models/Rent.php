@@ -3,7 +3,6 @@
 namespace app\modules\api\modules\v1\models;
 
 use yii\behaviors\TimestampBehavior;
-use app\models\GMTDatetime;
 use app\modules\api\modules\v1\Module;
 
 /**
@@ -19,6 +18,10 @@ use app\modules\api\modules\v1\Module;
  */
 class Rent extends \yii\db\ActiveRecord
 {
+    /**
+     * @var string Таймзона, например: Europe/Samara.
+     * @see https://www.php.net/manual/ru/timezones.php
+     */
     public $timezone;
 
     /**
@@ -47,14 +50,15 @@ class Rent extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'moto_id', 'date_rent_started', 'date_rent_ended', 'timezone'], 'required'],
-            [['moto_id', 'timezone'], 'integer'],
+            ['moto_id', 'integer'],
+            ['timezone', 'validateTimezone'],
             [['created_at', 'updated_at'], 'safe'],
-            [['date_rent_started', 'date_rent_ended'], 'string'],
-            [['date_rent_started', 'date_rent_ended'], 'date', 'format' => 'php:Y-m-d H:i:s'],
+            [['date_rent_started', 'date_rent_ended', 'timezone'], 'string'],
+            [['date_rent_started', 'date_rent_ended'], 'date', 'format' => 'php:Y-m-d H:i:s', 'message' => Module::t('errors', 'The format of {attribute} is invalid')],
             [['date_rent_started', 'date_rent_ended'], 'filter', 'filter' => function($value) {
-                $model = new GMTDatetime();
+                $model = new UTCDatetime();
                 $model->datetime = $value;
-                $model->gmtOffset = $this->timezone;
+                $model->timezone = $this->timezone;
                 $result = $model->normalize();
 
                 return $result;
@@ -63,6 +67,13 @@ class Rent extends \yii\db\ActiveRecord
             ['moto_id', 'validateMotoAlreadyRentedByAnotherUser'],
             ['moto_id', 'validateMotoAlreadyRentedByPeriod'],
         ];
+    }
+
+    public function validateTimezone($attribute, $params)
+    {
+        if (!in_array($this->$attribute, \DateTimeZone::listIdentifiers())) {
+            $this->addError($attribute, Module::t('errors', 'Unknown or bad timezone'));
+        }
     }
 
     //нельзя арендовать мотоцикл, который уже в аренде у ДРУГОГО пользователя (независимо от корректности даты аренды)
