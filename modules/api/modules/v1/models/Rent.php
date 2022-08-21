@@ -54,7 +54,7 @@ class Rent extends \yii\db\ActiveRecord
             ['timezone', 'validateTimezone'],
             [['created_at', 'updated_at'], 'safe'],
             [['date_rent_started', 'date_rent_ended', 'timezone'], 'string'],
-            [['date_rent_started', 'date_rent_ended'], 'date', 'format' => 'php:Y-m-d H:i:s', 'message' => 'The format of {attribute} is invalid.'],
+            [['date_rent_started', 'date_rent_ended'], 'date', 'format' => 'php:Y-m-d H:i:s', 'message' => Module::t('errors', 'The format of {attribute} is invalid')],
             [['date_rent_started', 'date_rent_ended'], 'filter', 'filter' => function($value) {
                 $model = new UTCDatetime();
                 $model->datetime = $value;
@@ -72,7 +72,7 @@ class Rent extends \yii\db\ActiveRecord
     public function validateTimezone($attribute, $params)
     {
         if (!in_array($this->$attribute, \DateTimeZone::listIdentifiers())) {
-            $this->addError($attribute, 'Unknown or bad timezone');
+            $this->addError($attribute, Module::t('errors', 'Unknown or bad timezone'));
         }
     }
 

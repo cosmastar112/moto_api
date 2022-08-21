@@ -2,6 +2,8 @@
 
 namespace app\modules\api\modules\v1\models;
 
+use app\modules\api\modules\v1\Module;
+
 class UTCDatetime extends \yii\base\Model
 {
     /** @var string  Дата в формате 'Y-m-d H:i:s' */
@@ -18,7 +20,7 @@ class UTCDatetime extends \yii\base\Model
         return [
             [['datetime', 'timezone'], 'required'],
             [['datetime', 'timezone'], 'string'],
-            ['datetime', 'date', 'format' => 'php:Y-m-d H:i:s', 'message' => 'The format of {attribute} is invalid.'],
+            ['datetime', 'date', 'format' => 'php:Y-m-d H:i:s', 'message' => Module::t('errors', 'The format of {attribute} is invalid')],
             ['timezone', 'validateTimezone'],
         ];
     }
@@ -26,7 +28,7 @@ class UTCDatetime extends \yii\base\Model
     public function validateTimezone($attribute, $params)
     {
         if (!in_array($this->$attribute, \DateTimeZone::listIdentifiers())) {
-            $this->addError($attribute, 'Unknown or bad timezone');
+            $this->addError($attribute, Module::t('errors', 'Unknown or bad timezone'));
         }
     }
 

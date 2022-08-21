@@ -20,6 +20,8 @@ return [
     'Motorbike already rented at this period' => 'Мотоцикл занят в указанный период',
     'Motorbike already rented by another user' => 'Мотоцикл арендован другим пользователем',
     'Motorbike not found' => 'Мотоцикл не найден',
-    'Period is incorrect, can\'t check is motorbike already rented by another user or not' => 'Не удалось проверить занятость мотоцикла другим пользователем, т.к. период указан некорректно',
     'Period is incorrect, can\'t check is motorbike already rented at this period or not' => 'Не удалось проверить занятость мотоцикла на указанный период, т.к. период указан некорректно',
+    'Period is incorrect, can\'t check is motorbike already rented by another user or not' => 'Не удалось проверить занятость мотоцикла другим пользователем, т.к. период указан некорректно',
+    'The format of {attribute} is invalid' => 'Неверный формат значения «{attribute}»',
+    'Unknown or bad timezone' => 'Неподдерживаемый часовой пояс',
 ];
