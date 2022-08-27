@@ -1,0 +1,1 @@
+ curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"username1\", \"email\":\"username1@mail.ru\", \"fio\":\"Name\"}" http://moto-rent-api.loc:8080/api/v1/user/create
