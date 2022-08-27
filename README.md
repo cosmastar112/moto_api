@@ -54,8 +54,8 @@ docker-compose up --build -d
 
 Применить миграции:
 ~~~
-docker-compose exec app php yii migrate --db=db --interactive=0
-docker-compose exec app php yii migrate --db=test_db --interactive=0
+docker-compose exec app php yii migrate-api-v1 --db=db --interactive=0
+docker-compose exec app php yii migrate-api-v1 --db=test_db --interactive=0
 ~~~
 
 Добавить в hosts связь IP-адреса с именем хоста:
@@ -119,7 +119,7 @@ GRANT ALL ON moto.* TO 'moto'@'localhost';
 Применить миграции для БД "moto"
 ~~~
 cd /d <Директория проекта>
-php yii migrate --db=db --interactive=0
+php yii migrate-api-v1 --db=db --interactive=0
 ~~~
 
 ##### Тестовая БД
@@ -135,7 +135,7 @@ GRANT ALL ON moto_test.* TO 'moto'@'localhost';
 Применить миграции для БД "moto_test"
 ~~~
 cd /d <Директория проекта>
-php yii migrate --db=test_db --interactive=0
+php yii migrate-api-v1 --db=test_db --interactive=0
 ~~~
 
 ## Использование (на примере curl)
