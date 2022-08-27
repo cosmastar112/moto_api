@@ -12,6 +12,7 @@ modules:
     config:
         Yii2:
             configFile: 'config/test.php'
+            transaction: false
         Db:
             dsn: 'mysql:host=db;dbname=moto_test'
             user: 'moto'
