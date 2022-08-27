@@ -18,10 +18,22 @@ class MotoAlreadyRentedValidator extends \yii\base\BaseObject
     //можно арендовать мотоцикл, который уже в аренде, но ТОЛЬКО У ЭТОГО ЖЕ пользователя (независимо от корректности даты аренды)
     public function validateMotoAlreadyRentedByAnotherUser()
     {
+        //проверить существование пользователя, который пытается арендовать мотоцикл
+        /** @var string|int|null|false $userId Id пользователя, если он существует. */
+        $userId = (new \yii\db\Query())
+            ->select('id')
+            ->from(User::tableName())
+            ->where(['username' => $this->username])
+            ->scalar($this->db);
+
+        if (!$userId) {
+            $this->setError('username', Module::t('errors', "User doesn't exist"));
+        }
+
         $models = Rent::find()
             ->where(['AND',
                 ['moto_id' => $this->moto_id],
-                ['!=', 'username', $this->username],
+                ['!=', 'user_id', $userId],
             ])
             ->all($this->db);
 

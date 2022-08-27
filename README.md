@@ -54,8 +54,8 @@ docker-compose up --build -d
 
 Применить миграции:
 ~~~
-docker-compose exec app php yii migrate --db=db --interactive=0
-docker-compose exec app php yii migrate --db=test_db --interactive=0
+docker-compose exec app php yii migrate-api-v1 --db=db --interactive=0
+docker-compose exec app php yii migrate-api-v1 --db=test_db --interactive=0
 ~~~
 
 Добавить в hosts связь IP-адреса с именем хоста:
@@ -119,7 +119,7 @@ GRANT ALL ON moto.* TO 'moto'@'localhost';
 Применить миграции для БД "moto"
 ~~~
 cd /d <Директория проекта>
-php yii migrate --db=db --interactive=0
+php yii migrate-api-v1 --db=db --interactive=0
 ~~~
 
 ##### Тестовая БД
@@ -135,7 +135,7 @@ GRANT ALL ON moto_test.* TO 'moto'@'localhost';
 Применить миграции для БД "moto_test"
 ~~~
 cd /d <Директория проекта>
-php yii migrate --db=test_db --interactive=0
+php yii migrate-api-v1 --db=test_db --interactive=0
 ~~~
 
 ## Использование (на примере curl)
@@ -153,6 +153,11 @@ curl -X GET http://moto-rent-api.loc:8080/api/v1/moto/1
 ### Создание аренды
 ~~~
 curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"username1\", \"date_rent_started\":\"2022-03-07 11:33:00\", \"date_rent_ended\":\"2022-03-07 12:33:00\", \"timezone\":\"Europe\/Samara\"}" http://moto-rent-api.loc:8080/api/v1/moto/2/rent
+~~~
+
+### Создание пользователя
+~~~
+curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"username1\", \"email\":\"username1@mail.ru\", \"fio\":\"Name\"}" http://moto-rent-api.loc:8080/api/v1/user/create
 ~~~
 
 ## Документация
