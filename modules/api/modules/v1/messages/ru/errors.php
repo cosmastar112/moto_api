@@ -24,4 +24,5 @@ return [
     'Period is incorrect, can\'t check is motorbike already rented by another user or not' => 'Не удалось проверить занятость мотоцикла другим пользователем, т.к. период указан некорректно',
     'The format of {attribute} is invalid' => 'Неверный формат значения «{attribute}»',
     'Unknown or bad timezone' => 'Неподдерживаемый часовой пояс',
+    'User doesn\'t exist' => 'Пользователь с таким логином не найден',
 ];

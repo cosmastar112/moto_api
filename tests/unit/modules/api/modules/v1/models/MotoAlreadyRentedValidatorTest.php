@@ -3,6 +3,7 @@
 namespace tests\unit\modules\api\modules\v1\models;
 
 use app\modules\api\modules\v1\models\MotoAlreadyRentedValidator;
+use app\modules\api\modules\v1\models\User;
 
 class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
 {
@@ -10,12 +11,14 @@ class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
     {
         $pdo = $this->getDb();
         $pdo->query('DELETE FROM rent; ALTER TABLE ad AUTO_INCREMENT = 1;');
+        $pdo->query('DELETE FROM user; ALTER TABLE user AUTO_INCREMENT = 1;');
     }
 
     protected function tearDown(): void
     {
         $pdo = $this->getDb();
         $pdo->query('DELETE FROM rent; ALTER TABLE ad AUTO_INCREMENT = 1;');
+        $pdo->query('DELETE FROM user; ALTER TABLE user AUTO_INCREMENT = 1;');
     }
 
     private function getDb()
@@ -25,29 +28,88 @@ class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
         return $dbModule->driver->getDbh();
     }
 
-    protected function _setUpBeforeAlreadyRentedByAnotherUser($username, $moto_id): void
-    {
-        $pdo = $this->getDb();
-        $sth = $pdo->prepare("INSERT INTO `rent` (`moto_id`, `username`, `date_rent_started`, `date_rent_ended`, `created_at`) VALUES (:moto_id, :username, '2022-03-07 11:33', '2022-03-08 11:33', '2022-03-08 11:33');");
-        $sth->bindParam(':username', $username, \PDO::PARAM_STR);
-        $sth->bindParam(':moto_id', $moto_id, \PDO::PARAM_INT);
-        $sth->execute();
-    }
-
     protected function _setUpBeforeAlreadyRentedByPeriod($date_rent_started, $date_rent_ended): void
     {
-        $pdo = $this->getDb();
-        $sth = $pdo->prepare("INSERT INTO `rent` (`moto_id`, `username`, `date_rent_started`, `date_rent_ended`, `created_at`) VALUES (1, 2, :date_rent_started, :date_rent_ended, '2022-03-08 11:33');");
-        $sth->bindParam(':date_rent_started', $date_rent_started, \PDO::PARAM_STR);
-        $sth->bindParam(':date_rent_ended', $date_rent_ended, \PDO::PARAM_STR);
-        $sth->execute();
+        $db = \Yii::$app->test_db;
+
+        //создать пользователя, который уже арендовал мотоцикл
+        $username = 'username';
+        $db->createCommand()->insert(User::tableName(), [
+            'username' => $username,
+            'email' => $username . '@mail.ru',
+            'fio' => $username . ' Name',
+            'created_at' => '2022-03-08 11:33',
+        ])->execute();
+
+        /** @var \yii\db\Connection $userId Id созданной записи (id пользователя). */
+        $userId = $db->getLastInsertID();
+
+        $db->createCommand()->insert(Rent::tableName(), [
+            'moto_id' => 1,
+            'user_id' => $userId,
+            'date_rent_started' => $date_rent_started,
+            'date_rent_ended' => $date_rent_ended,
+            'created_at' => '2022-03-08 11:33',
+        ])->execute();
+    }
+
+    //нельзя арендовать мотоцикл если пользователь не существует
+    public function testUserDoesntExists()
+    {
+        //ТЕСТ
+        $validator = new MotoAlreadyRentedValidator([
+            'username' => 'username',
+            'moto_id' => 1,
+            'db' => Rent::getDb(),
+        ]);
+        $validated = $validator->validateMotoAlreadyRentedByAnotherUser();
+        $errors = $validator->getErrors();
+
+        $this->assertFalse($validated);
+        $this->assertArrayHasKey('username', $errors);
     }
 
     //нельзя арендовать мотоцикл, который уже в аренде у ДРУГОГО пользователя (независимо от корректности даты аренды)
     public function testAlreadyRentedByAnotherUser()
     {
-        $this->_setUpBeforeAlreadyRentedByAnotherUser('username10', 1);
+        ////////////////////////////
+        //начало настройки БД перед запуском теста
+        /** @var \yii\db\Connection $db Соединение с тестовой БД. */
+        $db = \Yii::$app->test_db;
 
+        //создать пользователя, который уже арендовал мотоцикл
+        $username10 = 'username10';
+        $db->createCommand()->insert(User::tableName(), [
+            'username' => $username10,
+            'email' => $username10 . '@mail.ru',
+            'fio' => $username10 . ' Name',
+            'created_at' => '2022-03-08 11:33',
+        ])->execute();
+
+        /** @var \yii\db\Connection $userId Id созданной записи (id пользователя). */
+        $userId = $db->getLastInsertID();
+
+        //создать аренду
+        $db->createCommand()->insert(Rent::tableName(), [
+            'moto_id' => 1,
+            'user_id' => $userId,
+            'date_rent_started' => '2022-03-07 11:33',
+            'date_rent_ended' => '2022-03-08 11:33',
+            'created_at' => '2022-03-08 11:33',
+        ])->execute();
+
+        //создать пользователя, который пытается арендовать мотоцикл
+        $username2 = 'username2';
+        $db->createCommand()->insert(User::tableName(), [
+            'username' => $username2,
+            'email' => $username2 . '@mail.ru',
+            'fio' => $username2 . ' Name',
+            'created_at' => '2022-03-08 11:33',
+        ])->execute();
+        //конец настройки БД перед запуском теста
+        ////////////////////////////
+
+        //ТЕСТ
         $validator = new MotoAlreadyRentedValidator([
             'username' => 'username2',
             'moto_id' => 1,
@@ -63,10 +125,36 @@ class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
     //можно арендовать мотоцикл, который уже в аренде, но ТОЛЬКО У ЭТОГО ЖЕ пользователя (независимо от корректности даты аренды)
     public function testAlreadyRentedByThatUser()
     {
-        $username = 'username10';
-        $moto_id = 1;
-        $this->_setUpBeforeAlreadyRentedByAnotherUser($username, $moto_id);
+        ////////////////////////////
+        //начало настройки БД перед запуском теста
+        /** @var \yii\db\Connection $db Соединение с тестовой БД. */
+        $db = \Yii::$app->test_db;
 
+        //создать пользователя, который уже арендовал мотоцикл
+        $username = 'username';
+        $db->createCommand()->insert(User::tableName(), [
+            'username' => $username,
+            'email' => $username . '@mail.ru',
+            'fio' => $username . ' Name',
+            'created_at' => '2022-03-08 11:33',
+        ])->execute();
+
+        /** @var \yii\db\Connection $userId Id созданной записи (id пользователя). */
+        $userId = $db->getLastInsertID();
+
+        //создать аренду
+        $moto_id = 1;
+        $db->createCommand()->insert(Rent::tableName(), [
+            'moto_id' => $moto_id,
+            'user_id' => $userId,
+            'date_rent_started' => '2022-03-07 11:33',
+            'date_rent_ended' => '2022-03-08 11:33',
+            'created_at' => '2022-03-08 11:33',
+        ])->execute();
+        //конец настройки БД перед запуском теста
+        ////////////////////////////
+
+        //ТЕСТ
         $validator = new MotoAlreadyRentedValidator([
             'username' => $username,
             'moto_id' => $moto_id,
