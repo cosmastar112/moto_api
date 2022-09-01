@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 use app\modules\api\modules\v1\models\Rent;
 use app\modules\api\modules\v1\models\Motorbike;
 use app\modules\api\modules\v1\Module;
+use OpenApi\Annotations as OA;
 
 /**
  * @OA\Info(

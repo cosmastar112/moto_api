@@ -6,6 +6,7 @@ use Yii;
 use yii\rest\ActiveController;
 use yii\web\Response;
 use app\modules\api\modules\v1\models\User;
+use OpenApi\Annotations as OA;
 
 class UserController extends ActiveController
 {
