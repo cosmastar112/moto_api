@@ -56,7 +56,7 @@ class MotoAlreadyRentedValidator extends \yii\base\BaseObject
                 ['moto_id' => $this->moto_id],
                 ['OR',
                     new \yii\db\Expression("'$this->date_rent_started' BETWEEN date_rent_started AND date_rent_ended"),
-                    new \yii\db\Expression("'$this->date_rent_ended' BETWEEN date_rent_ended AND date_rent_ended"),
+                    new \yii\db\Expression("'$this->date_rent_ended' BETWEEN date_rent_started AND date_rent_ended"),
                     new \yii\db\Expression("date_rent_started BETWEEN '$this->date_rent_started' AND '$this->date_rent_ended'"),
                     new \yii\db\Expression("date_rent_ended BETWEEN '$this->date_rent_started' AND '$this->date_rent_ended'"),
                 ]
