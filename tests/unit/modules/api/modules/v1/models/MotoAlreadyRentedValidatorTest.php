@@ -28,7 +28,7 @@ class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
         return $dbModule->driver->getDbh();
     }
 
-    protected function _setUpBeforeAlreadyRentedByPeriod($date_rent_started, $date_rent_ended): void
+    protected function _setUpBeforeAlreadyRentedByPeriod($dateRentStarted, $dateRentEnded): void
     {
         $db = \Yii::$app->test_db;
 
@@ -47,8 +47,8 @@ class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
         $db->createCommand()->insert(Rent::tableName(), [
             'moto_id' => 1,
             'user_id' => $userId,
-            'date_rent_started' => $date_rent_started,
-            'date_rent_ended' => $date_rent_ended,
+            'date_rent_started' => $dateRentStarted,
+            'date_rent_ended' => $dateRentEnded,
             'created_at' => '2022-03-08 11:33',
         ])->execute();
     }
@@ -143,9 +143,9 @@ class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
         $userId = $db->getLastInsertID();
 
         //создать аренду
-        $moto_id = 1;
+        $motoId = 1;
         $db->createCommand()->insert(Rent::tableName(), [
-            'moto_id' => $moto_id,
+            'moto_id' => $motoId,
             'user_id' => $userId,
             'date_rent_started' => '2022-03-07 11:33',
             'date_rent_ended' => '2022-03-08 11:33',
@@ -157,7 +157,7 @@ class MotoAlreadyRentedValidatorTest extends \Codeception\Test\Unit
         //ТЕСТ
         $validator = new MotoAlreadyRentedValidator([
             'username' => $username,
-            'moto_id' => $moto_id,
+            'moto_id' => $motoId,
             'db' => Rent::getDb(),
         ]);
         $validated = $validator->validateMotoAlreadyRentedByAnotherUser();

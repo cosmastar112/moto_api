@@ -91,9 +91,9 @@ class MotoController extends ActiveController
     {
         $requestParams = Yii::$app->getRequest()->getQueryParams();
 
-        /** @var string $moto_id Идентификатор мотоцикла */
-        $moto_id = isset($requestParams['moto_id']) ? $requestParams['moto_id'] : null;
-        if (is_null($moto_id) || is_null(Motorbike::findOne($moto_id))) {
+        /** @var string $motoId Идентификатор мотоцикла */
+        $motoId = isset($requestParams['moto_id']) ? $requestParams['moto_id'] : null;
+        if (is_null($motoId) || is_null(Motorbike::findOne($motoId))) {
             throw new \yii\web\NotFoundHttpException(Module::t('errors', 'Motorbike not found'));
         }
 
